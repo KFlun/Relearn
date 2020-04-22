@@ -63,4 +63,57 @@ java继承、方法重写、final关键字、组合、super关键字
 1、继承  
 （1）子类会继承父类 **除构造方法** 外的所有变量和方法，但是继承了不一定代表可以直接使用（例如：Private修饰的方法或成员变量）  
 （2）final关键字可修饰方法，成员变量，类。对于方法和成员变量来说，即不可修改；对于类来说，就是不可再产生子类。  
-2、super关键字
+2、super关键字  
+子类通过super关键字可以调用父类的构造方法， **（即使不使用super关键字，子类也会依次向上调用父类的无参构造方法）** 。子类在调用无参的构造方法的时候，不能直接调用到父类的父类的构造方法，只能通过直接父类，一步一步向上调用。  
+
+```
+class Animal {
+    private String name;
+    private String diets;
+    private String sex;
+    private int life;
+    Cells cells = new Cells();  //组合
+
+    Animal() {
+    }
+
+    Animal(String name, String diets, String sex, int life) {
+        this.name = name;
+        this.diets = diets;
+        this.sex = sex;
+        this.life = life;
+    }  
+}
+    
+    class ModernAnimal extends Animal {
+    ModernAnimal(String name, String diets, String sex, int life){
+        super(name, diets, sex, life);
+    }
+}  
+
+class FlyingAnimal extends ModernAnimal {
+    private int flyHeight;
+    FlyingAnimal(String name, String diets, String sex, int life,int flyHeight) {//通过super调用父类的构造函数
+        super(name, diets, sex, life);
+        this.flyHeight = flyHeight;
+    }
+}
+```
+在以上的例子中，继承关系为：**Animal--->ModernAnimal--->FlyingAnimal** 。FlyingAnimal在进行构造函数的调用时，只能通过super语句调用ModernAnimal的构造方法，ModernAnimal在向上调用Animal的构造方法。
+```
+ FlyingAnimal(String name, String diets, String sex, int life,int flyHeight) {//通过super调用父类的构造函数
+        super(name, diets, sex, life);
+        this.flyHeight = flyHeight;
+    }  
+    
+ ModernAnimal(String name, String diets, String sex, int life){
+        super(name, diets, sex, life);
+    }  
+    
+ Animal(String name, String diets, String sex, int life) {
+        this.name = name;
+        this.diets = diets;
+        this.sex = sex;
+        this.life = life;
+     }      
+```
